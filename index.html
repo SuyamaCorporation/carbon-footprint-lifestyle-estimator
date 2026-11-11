@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ライフスタイル別カーボンフットプリント推定</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">ライフスタイル別カーボンフットプリント推定</h1>
+    <p class="text-gray-500 text-sm mb-6">交通・食事・電力・購買習慣から年間CO₂排出量を推定します。</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- 交通 -->
+      <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-base font-semibold text-gray-700 mb-3">🚗 交通</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="carKm">マイカー走行距離（km/月）</label>
+            <input id="carKm" type="number" min="0" max="10000" value="300" aria-label="マイカー走行距離km/月"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="trainKm">電車・バス利用距離（km/月）</label>
+            <input id="trainKm" type="number" min="0" max="10000" value="200" aria-label="電車バス利用距離km/月"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="flightHours">飛行機搭乗時間（時間/年）</label>
+            <input id="flightHours" type="number" min="0" max="500" value="10" aria-label="飛行機搭乗時間時間/年"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+        </div>
+      </div>
+
+      <!-- 食事 -->
+      <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-base font-semibold text-gray-700 mb-3">🍽️ 食事</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="meatDays">肉食の日数（日/週）</label>
+            <input id="meatDays" type="number" min="0" max="7" step="0.5" value="4" aria-label="肉食の日数日/週"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="beefDays">そのうち牛肉の日数（日/週）</label>
+            <input id="beefDays" type="number" min="0" max="7" step="0.5" value="1" aria-label="牛肉の日数日/週"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="foodWaste">食品廃棄（1=ほぼなし〜5=多い）</label>
+            <input id="foodWaste" type="range" min="1" max="5" step="1" value="3" aria-label="食品廃棄レベル"
+              class="w-full accent-green-500">
+            <div class="flex justify-between text-xs text-gray-400 mt-0.5"><span>少ない</span><span>多い</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 電力 -->
+      <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-base font-semibold text-gray-700 mb-3">⚡ 電力・ガス</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="elecKwh">電力消費量（kWh/月）</label>
+            <input id="elecKwh" type="number" min="0" max="2000" value="250" aria-label="電力消費量kWh/月"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="gasM3">都市ガス使用量（m³/月）</label>
+            <input id="gasM3" type="number" min="0" max="500" value="20" aria-label="都市ガス使用量m3/月"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+        </div>
+      </div>
+
+      <!-- 購買 -->
+      <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-base font-semibold text-gray-700 mb-3">🛍️ 購買・消費</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="clothingSpend">衣類購買（千円/月）</label>
+            <input id="clothingSpend" type="number" min="0" max="500" value="10" aria-label="衣類購買千円/月"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1" for="electronicsSpend">電子機器購買（千円/月）</label>
+            <input id="electronicsSpend" type="number" min="0" max="500" value="5" aria-label="電子機器購買千円/月"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button id="calcBtn" aria-label="CO2排出量を計算"
+      class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-2 rounded-lg transition mb-6">
+      CO₂排出量を計算
+    </button>
+
+    <!-- 結果 -->
+    <div id="resultArea" class="hidden">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-green-50 rounded-xl p-4 text-center">
+          <div class="text-xs text-gray-500 mb-1">あなたの年間排出量</div>
+          <div id="yourTotal" class="text-2xl font-bold text-green-700">-</div>
+          <div class="text-xs text-gray-400">t-CO₂e/年</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 text-center">
+          <div class="text-xs text-gray-500 mb-1">日本人平均</div>
+          <div class="text-2xl font-bold text-gray-500">9.5</div>
+          <div class="text-xs text-gray-400">t-CO₂e/年</div>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-4 text-center">
+          <div class="text-xs text-gray-500 mb-1">平均比</div>
+          <div id="compAvg" class="text-2xl font-bold text-blue-700">-</div>
+          <div class="text-xs text-gray-400">（1.0が平均）</div>
+        </div>
+      </div>
+
+      <!-- カテゴリ別棒グラフ -->
+      <div class="bg-white rounded-xl shadow p-5 mb-6">
+        <h2 class="text-base font-semibold text-gray-700 mb-3">カテゴリ別排出量 vs 日本平均</h2>
+        <div id="barChart" class="space-y-3"></div>
+      </div>
+
+      <!-- 削減策 -->
+      <div class="bg-white rounded-xl shadow p-5 mb-6">
+        <h2 class="text-base font-semibold text-gray-700 mb-3">削減シミュレーション（クリックで効果確認）</h2>
+        <div id="reductions" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+        <div id="reductionResult" class="mt-3 text-sm text-gray-700 hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+    const STORAGE_KEY = 'cf-estimator-v1';
+
+    // 排出係数
+    const EF = {
+      car: 0.000132,       // t-CO2e/km (ガソリン車)
+      train: 0.000018,     // t-CO2e/km
+      flight: 0.255,       // t-CO2e/hour
+      beef: 0.0068,        // t-CO2e/meal (牛肉1食)
+      meat: 0.0021,        // t-CO2e/meal (鶏豚等)
+      foodWaste: 0.05,     // t-CO2e/年 per level
+      elec: 0.000434,      // t-CO2e/kWh (日本平均)
+      gas: 0.00230,        // t-CO2e/m3
+      clothing: 0.00040,   // t-CO2e/千円
+      electronics: 0.00060 // t-CO2e/千円
+    };
+
+    const JP_AVG = {
+      transport: 2.0,
+      food: 2.5,
+      energy: 2.5,
+      goods: 2.5
+    };
+
+    function load() {
+      try {
+        const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        ['carKm','trainKm','flightHours','meatDays','beefDays','foodWaste','elecKwh','gasM3','clothingSpend','electronicsSpend'].forEach(id => {
+          if (d[id] !== undefined) document.getElementById(id).value = d[id];
+        });
+      } catch(e){}
+    }
+
+    function save() {
+      const obj = {};
+      ['carKm','trainKm','flightHours','meatDays','beefDays','foodWaste','elecKwh','gasM3','clothingSpend','electronicsSpend'].forEach(id => {
+        obj[id] = document.getElementById(id).value;
+      });
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch(e){}
+    }
+
+    function calc() {
+      save();
+      const carKm = parseFloat(document.getElementById('carKm').value) || 0;
+      const trainKm = parseFloat(document.getElementById('trainKm').value) || 0;
+      const flightHours = parseFloat(document.getElementById('flightHours').value) || 0;
+      const meatDays = parseFloat(document.getElementById('meatDays').value) || 0;
+      const beefDays = parseFloat(document.getElementById('beefDays').value) || 0;
+      const foodWaste = parseInt(document.getElementById('foodWaste').value) || 1;
+      const elecKwh = parseFloat(document.getElementById('elecKwh').value) || 0;
+      const gasM3 = parseFloat(document.getElementById('gasM3').value) || 0;
+      const clothingSpend = parseFloat(document.getElementById('clothingSpend').value) || 0;
+      const electronicsSpend = parseFloat(document.getElementById('electronicsSpend').value) || 0;
+
+      const transport = (carKm * 12 * EF.car) + (trainKm * 12 * EF.train) + (flightHours * EF.flight);
+      const food = (beefDays * 52 * EF.beef) + ((meatDays - beefDays) * 52 * EF.meat) + (foodWaste * EF.foodWaste);
+      const energy = (elecKwh * 12 * EF.elec) + (gasM3 * 12 * EF.gas);
+      const goods = ((clothingSpend + electronicsSpend) * 12 * EF.clothing);
+      const total = transport + food + energy + goods;
+
+      document.getElementById('yourTotal').textContent = total.toFixed(2);
+      document.getElementById('compAvg').textContent = (total / 9.5).toFixed(2);
+
+      // カテゴリ別棒グラフ
+      const categories = [
+        { name: '交通', yours: transport, avg: JP_AVG.transport, color: 'bg-blue-400' },
+        { name: '食事', yours: food, avg: JP_AVG.food, color: 'bg-orange-400' },
+        { name: 'エネルギー', yours: energy, avg: JP_AVG.energy, color: 'bg-yellow-400' },
+        { name: '購買', yours: goods, avg: JP_AVG.goods, color: 'bg-purple-400' },
+      ];
+      const maxVal = Math.max(...categories.map(c => Math.max(c.yours, c.avg)), 0.1) * 1.1;
+
+      document.getElementById('barChart').innerHTML = categories.map(c => {
+        const yoursPct = (c.yours / maxVal * 100).toFixed(1);
+        const avgPct = (c.avg / maxVal * 100).toFixed(1);
+        return `<div>
+          <div class="flex justify-between text-xs text-gray-500 mb-0.5">
+            <span>${escHtml(c.name)}</span>
+            <span>あなた: ${c.yours.toFixed(2)}t / 平均: ${c.avg.toFixed(1)}t</span>
+          </div>
+          <div class="relative h-5 bg-gray-100 rounded overflow-hidden">
+            <div class="absolute inset-y-0 left-0 ${c.color} rounded" style="width:${yoursPct}%" title="あなた"></div>
+          </div>
+          <div class="relative h-2 bg-gray-100 rounded overflow-hidden mt-0.5">
+            <div class="absolute inset-y-0 left-0 bg-gray-400 rounded" style="width:${avgPct}%" title="日本平均"></div>
+          </div>
+          <div class="flex gap-2 text-xs text-gray-400 mt-0.5"><span class="text-blue-500">■あなた</span><span class="text-gray-500">■日本平均</span></div>
+        </div>`;
+      }).join('');
+
+      // 削減策
+      const reductions = [
+        { label: '週1菜食（ミートフリーマンデー）', delta: 52 * EF.meat * 1 },
+        { label: '牛肉を半分減らす', delta: beefDays * 52 * EF.beef * 0.5 },
+        { label: '車を電気自動車に切替', delta: carKm * 12 * EF.car * 0.6 },
+        { label: '国内フライト半減', delta: flightHours * 0.5 * EF.flight },
+        { label: '節電10%削減', delta: elecKwh * 0.1 * 12 * EF.elec },
+        { label: '衣類購入を半分に', delta: clothingSpend * 0.5 * 12 * EF.clothing },
+        { label: '食品廃棄を最小化', delta: (foodWaste - 1) * EF.foodWaste },
+        { label: '太陽光発電設置（月100kWh相当）', delta: 100 * 12 * EF.elec },
+      ];
+
+      document.getElementById('reductions').innerHTML = reductions.map((r, i) =>
+        `<button class="reduction-btn text-left border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-green-50 hover:border-green-300 transition"
+          aria-label="${escHtml(r.label)}の削減効果を確認" data-delta="${r.delta.toFixed(3)}" data-label="${escHtml(r.label)}">
+          ${escHtml(r.label)}
+          <span class="text-xs text-green-600 font-semibold">-${r.delta.toFixed(2)}t</span>
+        </button>`
+      ).join('');
+
+      document.querySelectorAll('.reduction-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const delta = parseFloat(btn.dataset.delta);
+          const newTotal = Math.max(0, total - delta);
+          const el = document.getElementById('reductionResult');
+          el.innerHTML = `<span class="font-semibold text-green-700">「${escHtml(btn.dataset.label)}」</span> を実施すると:<br>
+            ${total.toFixed(2)}t → <span class="font-bold text-green-600">${newTotal.toFixed(2)}t</span>（-${delta.toFixed(2)}t CO₂e/年）`;
+          el.classList.remove('hidden');
+        });
+      });
+
+      document.getElementById('resultArea').classList.remove('hidden');
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', calc);
+    load();
+    calc();
+  </script>
+</body>
+</html>
